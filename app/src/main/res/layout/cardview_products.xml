@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -11,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="#121F3D"
+        app:cardBackgroundColor="@color/dark_blue"
         app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +19,7 @@
 
             <ImageView
                 android:id="@+id/cardviewProductImageView"
+                android:contentDescription="@string/defaultImageView"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="TextView"
+                android:text="@string/defaultTextView"
                 android:textColor="#F8F8F8"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -49,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textColor="#B1A6A6"
+                android:text="@string/defaultTextView"
+                android:textColor="@color/gray"
                 android:textSize="20sp"
                 android:textStyle="italic"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +60,7 @@
 
             <ImageView
                 android:id="@+id/cardviewProductFavImage"
+                android:contentDescription="@string/defaultImageView"
                 android:layout_width="32dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"

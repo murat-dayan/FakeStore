@@ -1,9 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FakeStore</string>
     <string name="defaultTextView">TextView</string>
     <string name="defaultImageView">imageView</string>
     <string name="translate_english">Translate english</string>
-    <string name="favorites">Favorites</string>
-    <string name="settings">Settings</string>
-    <string name="products">All Products</string>
 </resources>

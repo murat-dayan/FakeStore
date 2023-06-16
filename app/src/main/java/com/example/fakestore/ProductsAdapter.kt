@@ -1,6 +1,7 @@
 package com.example.fakestore
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,12 @@ class ProductsAdapter(val mContext:Context, val productsList: List<Products>):
         Picasso.get()
             .load(url)
             .into(holder.cardviewProductImageView)
+
+        holder.cardviewProduct.setOnClickListener {
+            val intent= Intent(mContext,ProductDetailActivity::class.java)
+            intent.putExtra("product",product)
+            mContext.startActivity(intent)
+        }
 
 
 

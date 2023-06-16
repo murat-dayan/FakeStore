@@ -29,6 +29,7 @@ class ProductsActivity : AppCompatActivity() {
         category= intent.getSerializableExtra("category") as Categories
 
         binding.toolbarPA.title= "${category.name}"
+        binding.toolbarPA.setBackgroundColor(getColor(R.color.dark_blue))
         setSupportActionBar(binding.toolbarPA)
 
         println(category.id)

@@ -1,7 +1,12 @@
 package com.example.fakestore
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.NotNull
 
 data class Products(
 
@@ -19,7 +24,7 @@ data class Products(
     var description:String,
     @SerializedName("images")
     @Expose
-    var images: List<String>,
+    var images: List<String> = emptyList(),
     @SerializedName("creationAt")
     @Expose
     var creationAt:String,
