@@ -1,11 +1,10 @@
 package com.example.fakestore
 
-import androidx.room.Dao
-import androidx.room.Insert
+import android.content.ContentValues
+import androidx.room.*
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Query
-
+import retrofit2.http.Query as RetrofitQuery
 interface ProductsDaoInterface {
 
     @GET("products")
@@ -15,10 +14,12 @@ interface ProductsDaoInterface {
     fun getAllCategories(): Call<List<Categories>>
 
     @GET("products/")
-    fun getProductsByCategory(@Query("categoryId") id: Int): Call<List<Products>>
+    fun getProductsByCategory(@RetrofitQuery("categoryId") id: Int): Call<List<Products>>
 
     @GET("products/")
-    fun getProductsByTitle(@Query("title") title:String): Call<List<Products>>
+    fun getProductsByTitle(@RetrofitQuery("title") title:String): Call<List<Products>>
+
+
 
 
 

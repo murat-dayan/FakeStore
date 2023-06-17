@@ -24,7 +24,7 @@ data class Products(
     var description:String,
     @SerializedName("images")
     @Expose
-    var images: List<String> = emptyList(),
+    var images: List<String>,
     @SerializedName("creationAt")
     @Expose
     var creationAt:String,

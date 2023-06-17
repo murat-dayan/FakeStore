@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var productsAdapter: ProductsAdapter
     private var lastQuery: String = ""
+    val favoriteList = ArrayList<Products>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,6 +188,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
 
         })
+    }
+
+    fun addToFavorites(product: Products) {
+        if (!favoriteList.contains(product)) {
+            favoriteList.add(product)
+        }
     }
 
 
