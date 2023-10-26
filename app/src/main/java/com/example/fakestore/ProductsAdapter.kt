@@ -88,9 +88,9 @@ class ProductsAdapter(val mContext:Context, val productsList: List<Products>):
                                                 product.category.id)
 
                         if (isLoad){
-                            Toast.makeText(mContext,"Product added",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext,R.string.productAdded ,Toast.LENGTH_SHORT).show()
                         }else{
-                            Toast.makeText(mContext,"Product is already exist",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(mContext,R.string.productsAlreadyExist ,Toast.LENGTH_SHORT).show()
                         }
 
                     }

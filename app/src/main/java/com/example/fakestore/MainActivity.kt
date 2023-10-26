@@ -3,6 +3,7 @@ package com.example.fakestore
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -20,6 +21,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this, R.layout.activity_main)
+
 
 
 
@@ -93,13 +97,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     }
 
-    override fun onQueryTextSubmit(query: String): Boolean {
+    override fun onQueryTextSubmit(query: String?): Boolean {
         if (query.isNullOrEmpty()) {
             allProducts()
         } else {
             allProductsByTitle(query)
         }
-        lastQuery = query ?: ""
         return true
     }
 
@@ -143,7 +146,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         })
     }
 
-    fun allCategories(){
+    fun
+            allCategories(){
         pdi= ApiUtils.getProductsDaoInterface()
 
         pdi.getAllCategories().enqueue(object : Callback<List<Categories>>{
@@ -190,11 +194,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         })
     }
 
-    fun addToFavorites(product: Products) {
-        if (!favoriteList.contains(product)) {
-            favoriteList.add(product)
-        }
-    }
+
 
 
 
