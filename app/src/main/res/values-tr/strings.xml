@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">FakeStore</string>
+    <string name="defaultTextView">metin</string>
+    <string name="defaultImageView">metin</string>
+    <string name="translate_english">İngilizceye Çevir</string>
+    <string name="favorites">Favoriler</string>
+    <string name="settings">Ayarlar</string>
+    <string name="products">Tüm Ürünler</string>
+    <string name="exit">Çıkış</string>
+    <string name="addFav">Fav\'a Ekle</string>
+    <string name="addCart">Sepet\'e Ekle</string>
+    <string name="splashtitle">MAĞAZA</string>
+    <string name="productAdded">Ürün Eklendi</string>
+    <string name="productsAlreadyExist">Ürün Zaten Mevcut</string>
+    <string name="yourCart">Sepetin</string>
+    <string name="isProductDelete">sepetten kaldırılacaktır.emin misiniz?</string>
+    <string name="yes">Evet</string>
+    <string name="noInternetConnection">oops ağ bağlantısı bulunamadı!!!</string>
+    <string name="cartAmount">Sepet Tutarı: €</string>
+    <string name="payButton">Öde</string>
+</resources>
