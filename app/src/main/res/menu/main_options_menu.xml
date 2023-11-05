@@ -2,6 +2,7 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search_icon"
@@ -9,11 +10,15 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_your_cart"
+        android:icon="@drawable/cart_icon"
+        android:title="@string/yourCart"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_favorites"
 
         android:icon="@drawable/like_icon"
-        android:title="Favorites"
-        app:showAsAction="always" />
+        android:title="Favorites" />
     <item
         android:id="@+id/action_settings"
         android:title="@string/settings"

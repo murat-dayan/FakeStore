@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/action_add_cart"
+        android:title="@string/addCart" />
+    <item
         android:id="@+id/action_add_fav"
         android:title="@string/addFav" />
 </menu>

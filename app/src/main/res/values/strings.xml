@@ -8,7 +8,14 @@
     <string name="products">All Products</string>
     <string name="exit">Exit</string>
     <string name="addFav">Add Fav</string>
+    <string name="addCart">Add Cart</string>
     <string name="splashtitle">FAKE STORE</string>
     <string name="productAdded">Product Added</string>
     <string name="productsAlreadyExist">Product Already Exist</string>
+    <string name="yourCart">Your Cart</string>
+    <string name="isProductDelete">will be removed from the cart. Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="noInternetConnection">oops no network connection!!!</string>
+    <string name="cartAmount">Cart Amount: €</string>
+    <string name="payButton">Pay</string>
 </resources>

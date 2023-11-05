@@ -1,6 +1,8 @@
 package com.example.fakestore
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.room.Database
 import com.example.fakestore.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.ToNumberStrategy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,8 +55,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding.rvMAP.layoutManager= StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
 
-        allCategories()
-        allProducts()
+        if (!isConnectedToInternet()){
+            Toast.makeText(this,"internet yok",Toast.LENGTH_LONG).show()
+        }else{
+            allCategories()
+            allProducts()
+        }
+
+
 
 
     }
@@ -72,6 +81,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when(item.itemId){
+            R.id.action_your_cart->{
+                startActivity(Intent(this@MainActivity, CartActivity::class.java))
+                return true
+            }
             R.id.action_search->{
                 return true
             }
@@ -192,6 +205,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
 
         })
+    }
+
+    fun isConnectedToInternet():Boolean{
+        val connectivityManager= getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo= connectivityManager.activeNetworkInfo
+
+        return networkInfo != null && networkInfo.isConnected
     }
 
 

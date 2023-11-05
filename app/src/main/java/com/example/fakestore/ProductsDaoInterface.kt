@@ -5,7 +5,17 @@ import androidx.room.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query as RetrofitQuery
+
+@Dao
 interface ProductsDaoInterface {
+    
+    
+    
+    @Query("SELECT*FROM productsfav")
+    suspend fun allFavProducts(): List<Products>
+
+    @Insert
+    suspend fun addProducts(products: Products)
 
     @GET("products")
     fun getallProducts(): Call<List<Products>>

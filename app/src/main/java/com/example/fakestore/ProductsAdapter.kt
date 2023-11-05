@@ -73,6 +73,26 @@ class ProductsAdapter(val mContext:Context, val productsList: List<Products>):
 
 
                 when(menuItem.itemId){
+
+                    R.id.action_add_cart->{
+                        val db= DatabaseHelper(mContext)
+                        val isLoad= SqlDao().addProductCart(    db,
+                            product,
+                            product.id,
+                            product.title,
+                            product.price,
+                            product.description,
+                            product.images[0],
+                            product.creationAt,
+                            product.updatedAt,
+                            product.category.id)
+
+                        if (isLoad){
+                            Toast.makeText(mContext,R.string.productAdded ,Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(mContext,R.string.productsAlreadyExist ,Toast.LENGTH_SHORT).show()
+                        }
+                    }
                     R.id.action_add_fav->{
 
                         val db= DatabaseHelper(mContext)
