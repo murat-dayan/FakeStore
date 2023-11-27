@@ -10,7 +10,7 @@
     <string name="products">Tüm Ürünler</string>
     <string name="exit">Çıkış</string>
     <string name="addFav">Fav\'a Ekle</string>
-    <string name="addCart">Sepet\'e Ekle</string>
+    <string name="addCart">Sepete Ekle</string>
     <string name="splashtitle">MAĞAZA</string>
     <string name="productAdded">Ürün Eklendi</string>
     <string name="productsAlreadyExist">Ürün Zaten Mevcut</string>
@@ -20,4 +20,14 @@
     <string name="noInternetConnection">oops ağ bağlantısı bulunamadı!!!</string>
     <string name="cartAmount">Sepet Tutarı: €</string>
     <string name="payButton">Öde</string>
+    <string name="nightMode">Gece Modunu Aç</string>
+    <string name="normalMode">Gece Modunu Kapat</string>
+    <string name="reminder">Hatırlatma</string>
+    <string name="off">Kapalı</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Şifre</string>
+    <string name="signIn">Giriş Yap</string>
+    <string name="signUp">Kayıt Ol</string>
+    <string name="signOut">Oturumu Kapat</string>
+
 </resources>

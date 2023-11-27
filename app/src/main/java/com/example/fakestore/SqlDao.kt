@@ -167,6 +167,62 @@ class SqlDao {
         db.close()
     }
 
+    fun getLanguage(dbh: DatabaseHelper):String{
+        val db= dbh.readableDatabase
+
+        val query="SELECT language from myPrefs"
+        val cursor= db.rawQuery(query,null)
+        var language=""
+        if (cursor.moveToFirst()){
+             language= cursor.getString(cursor.getColumnIndexOrThrow("language"))
+        }
+        cursor.close()
+        db.close()
+
+        return language
+    }
+
+    fun addPrefs(dbh: DatabaseHelper,lang:String, nightmode:Int){
+        val db= dbh.writableDatabase
+
+        val query = "INSERT INTO myPrefs (language, nightmode) VALUES ('$lang', '$nightmode')"
+        db.execSQL(query)
+        db.close()
+
+
+    }
+
+    fun updateLanguage(dbh: DatabaseHelper, newLang:String){
+        val db= dbh.writableDatabase
+
+        val query="UPDATE myPrefs SET language = '$newLang'"
+        db.execSQL(query)
+        db.close()
+    }
+
+    fun getNightMode(dbh: DatabaseHelper):Int{
+        val db= dbh.readableDatabase
+
+        val query="SELECT nightmode from myPrefs"
+        val cursor= db.rawQuery(query,null)
+        var nightmode=0
+        if (cursor.moveToFirst()){
+            nightmode= cursor.getInt(cursor.getColumnIndexOrThrow("nightmode"))
+        }
+        cursor.close()
+        db.close()
+
+        return nightmode
+    }
+
+    fun updateNightMode(dbh: DatabaseHelper, newMode:Int){
+        val db= dbh.writableDatabase
+
+        val query="UPDATE myPrefs SET nightmode = '$newMode'"
+        db.execSQL(query)
+        db.close()
+    }
+
 
 
 }

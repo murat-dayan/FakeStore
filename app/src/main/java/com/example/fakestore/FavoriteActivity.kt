@@ -18,7 +18,7 @@ class FavoriteActivity : AppCompatActivity() {
 
 
         binding.toolbarFA.title= getString(R.string.favorites)
-        binding.toolbarFA.setBackgroundColor(getColor(R.color.dark_blue))
+        binding.toolbarFA.setBackgroundColor(getColor(R.color.main_color))
 
         setSupportActionBar(binding.toolbarFA)
 

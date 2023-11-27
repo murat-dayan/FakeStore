@@ -15,5 +15,16 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:itemBackground">@color/main_color</item>
     </style>
+
+    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="popupMenuBackground">@color/main_color</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="popUpMenu" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

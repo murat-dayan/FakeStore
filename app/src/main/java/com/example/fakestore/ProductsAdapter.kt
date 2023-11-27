@@ -70,11 +70,12 @@ class ProductsAdapter(val mContext:Context, val productsList: List<Products>):
             popupMenu.inflate(R.menu.more_menu)
 
             popupMenu.setOnMenuItemClickListener {menuItem->
-
-
                 when(menuItem.itemId){
 
+
+
                     R.id.action_add_cart->{
+
                         val db= DatabaseHelper(mContext)
                         val isLoad= SqlDao().addProductCart(    db,
                             product,

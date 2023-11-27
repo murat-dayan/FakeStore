@@ -3,29 +3,22 @@ package com.example.fakestore
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.room.Database
 import com.example.fakestore.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.ToNumberStrategy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -33,46 +26,47 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var pdi: ProductsDaoInterface
     private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var productsAdapter: ProductsAdapter
-    private var lastQuery: String = ""
-    val favoriteList = ArrayList<Products>()
-
+    private lateinit var userMail:String
+    private lateinit var auth:FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        setTheme(R.style.Theme_FakeStore)
+
+        auth= FirebaseAuth.getInstance()
 
 
-
-
-        binding.toolbarMA.title= getString(R.string.products)
-        binding.toolbarMA.setBackgroundColor(getColor(R.color.dark_blue))
+        binding.toolbarMA.title = getString(R.string.products)
+        binding.toolbarMA.setBackgroundColor(getColor(R.color.main_color))
         setSupportActionBar(binding.toolbarMA)
 
         binding.rvMA.setHasFixedSize(true)
-        binding.rvMA.layoutManager= StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.HORIZONTAL)
+        binding.rvMA.layoutManager =
+            StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
 
         binding.rvMAP.setHasFixedSize(true)
-        binding.rvMAP.layoutManager= StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvMAP.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
 
-        if (!isConnectedToInternet()){
-            Toast.makeText(this,"internet yok",Toast.LENGTH_LONG).show()
-        }else{
+        if (!isConnectedToInternet()) {
+            Toast.makeText(this, "internet yok", Toast.LENGTH_LONG).show()
+        } else {
             allCategories()
             allProducts()
         }
-
-
 
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        menuInflater.inflate(R.menu.main_options_menu,menu)
+        menuInflater.inflate(R.menu.main_options_menu, menu)
 
-        val item= menu!!.findItem(R.id.action_search)
-        val searchView= item.actionView as SearchView
+        val item = menu!!.findItem(R.id.action_search)
+        val searchView = item.actionView as SearchView
         searchView.setOnQueryTextListener(this@MainActivity)
 
         return true
@@ -80,28 +74,26 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item.itemId){
-            R.id.action_your_cart->{
+        when (item.itemId) {
+            R.id.action_your_cart -> {
                 startActivity(Intent(this@MainActivity, CartActivity::class.java))
                 return true
             }
-            R.id.action_search->{
+            R.id.action_search -> {
                 return true
             }
-            R.id.action_favorites->{
+            R.id.action_favorites -> {
                 startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
                 return true
             }
-            R.id.action_settings->{
-                startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+            R.id.action_settings -> {
+                val intent= Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(intent)
                 return true
             }
-            R.id.action_exit->{
-                val intent = Intent(Intent.ACTION_MAIN)
-                intent.addCategory(Intent.CATEGORY_HOME)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-                finish()
+            R.id.action_sign_out -> {
+                auth.signOut()
+                startActivity(Intent(this,LoginActivity::class.java))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -120,9 +112,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
 
-
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (!newText.isNullOrEmpty()){
+        if (!newText.isNullOrEmpty()) {
             allProductsByTitle(newText)
         } else {
             allProducts()
@@ -134,18 +125,21 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     }
 
-    fun allProductsByTitle(searchedProduct:String){
-        pdi= ApiUtils.getProductsDaoInterface()
+    fun allProductsByTitle(searchedProduct: String) {
+        pdi = ApiUtils.getProductsDaoInterface()
 
-        pdi.getProductsByTitle(searchedProduct).enqueue(object : Callback<List<Products>>{
-            override fun onResponse(call: Call<List<Products>>?, response: Response<List<Products>>?) {
-                if (response != null){
-                    val liste= response.body()
+        pdi.getProductsByTitle(searchedProduct).enqueue(object : Callback<List<Products>> {
+            override fun onResponse(
+                call: Call<List<Products>>?,
+                response: Response<List<Products>>?
+            ) {
+                if (response != null) {
+                    val liste = response.body()
 
-                    if (liste != null){
-                        productsAdapter= ProductsAdapter(this@MainActivity, liste)
-                        binding.rvMAP.adapter= productsAdapter
-                    }else{
+                    if (liste != null) {
+                        productsAdapter = ProductsAdapter(this@MainActivity, liste)
+                        binding.rvMAP.adapter = productsAdapter
+                    } else {
                         Toast.makeText(this@MainActivity, "Not Found", Toast.LENGTH_SHORT).show()
                     }
 
@@ -160,17 +154,20 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     fun
-            allCategories(){
-        pdi= ApiUtils.getProductsDaoInterface()
+            allCategories() {
+        pdi = ApiUtils.getProductsDaoInterface()
 
-        pdi.getAllCategories().enqueue(object : Callback<List<Categories>>{
-            override fun onResponse(call: Call<List<Categories>>?, response: Response<List<Categories>>?) {
+        pdi.getAllCategories().enqueue(object : Callback<List<Categories>> {
+            override fun onResponse(
+                call: Call<List<Categories>>?,
+                response: Response<List<Categories>>?
+            ) {
 
-                if (response != null){
-                    val liste= response.body()
+                if (response != null) {
+                    val liste = response.body()
 
-                    categoriesAdapter= CategoriesAdapter(this@MainActivity, liste)
-                    binding.rvMA.adapter= categoriesAdapter
+                    categoriesAdapter = CategoriesAdapter(this@MainActivity, liste)
+                    binding.rvMA.adapter = categoriesAdapter
 
 
                 }
@@ -185,16 +182,19 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         })
     }
 
-    fun allProducts(){
-        pdi= ApiUtils.getProductsDaoInterface()
+    fun allProducts() {
+        pdi = ApiUtils.getProductsDaoInterface()
 
-        pdi.getallProducts().enqueue(object : Callback<List<Products>>{
-            override fun onResponse(call: Call<List<Products>>?, response: Response<List<Products>>?) {
-                if (response != null){
-                    val liste= response.body()
+        pdi.getallProducts().enqueue(object : Callback<List<Products>> {
+            override fun onResponse(
+                call: Call<List<Products>>?,
+                response: Response<List<Products>>?
+            ) {
+                if (response != null) {
+                    val liste = response.body()
 
-                    productsAdapter= ProductsAdapter(this@MainActivity, liste)
-                    binding.rvMAP.adapter= productsAdapter
+                    productsAdapter = ProductsAdapter(this@MainActivity, liste)
+                    binding.rvMAP.adapter = productsAdapter
 
                 }
             }
@@ -207,16 +207,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         })
     }
 
-    fun isConnectedToInternet():Boolean{
-        val connectivityManager= getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo= connectivityManager.activeNetworkInfo
+    fun isConnectedToInternet(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
 
         return networkInfo != null && networkInfo.isConnected
     }
-
-
-
-
 
 
 }

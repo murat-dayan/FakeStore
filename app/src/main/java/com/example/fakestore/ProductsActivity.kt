@@ -19,17 +19,18 @@ class ProductsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_products)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_products)
 
 
 
         binding.rvPA.setHasFixedSize(true)
-        binding.rvPA.layoutManager= StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvPA.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        category= intent.getSerializableExtra("category") as Categories
+        category = intent.getSerializableExtra("category") as Categories
 
-        binding.toolbarPA.title= "${category.name}"
-        binding.toolbarPA.setBackgroundColor(getColor(R.color.dark_blue))
+        binding.toolbarPA.title = "${category.name}"
+        binding.toolbarPA.setBackgroundColor(getColor(R.color.main_color))
         setSupportActionBar(binding.toolbarPA)
 
         println(category.id)
@@ -38,17 +39,20 @@ class ProductsActivity : AppCompatActivity() {
 
     }
 
-    fun allProductsbyCategory(){
-        pdi= ApiUtils.getProductsDaoInterface()
+    fun allProductsbyCategory() {
+        pdi = ApiUtils.getProductsDaoInterface()
 
         pdi.getProductsByCategory(category.id).enqueue(object : Callback<List<Products>> {
-            override fun onResponse(call: Call<List<Products>>?, response: Response<List<Products>>?) {
+            override fun onResponse(
+                call: Call<List<Products>>?,
+                response: Response<List<Products>>?
+            ) {
 
-                if (response != null){
-                    val liste= response.body()
+                if (response != null) {
+                    val liste = response.body()
 
-                    productsAdapter= ProductsAdapter(this@ProductsActivity, liste)
-                    binding.rvPA.adapter= productsAdapter
+                    productsAdapter = ProductsAdapter(this@ProductsActivity, liste)
+                    binding.rvPA.adapter = productsAdapter
 
                 }
             }

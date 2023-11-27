@@ -32,12 +32,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context,"productsv",nu
                 "\tFOREIGN KEY(\"category\") REFERENCES \"categories\"(\"id\")\n" +
                 ")")
 
+        db?.execSQL("CREATE TABLE \"myPrefs\" (\n" +
+                "\t\"language\"\tTEXT,\n" +
+                "\t\"nightmode\"\tINTEGER\n" +
+                ")")
+
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         db?.execSQL("DROP TABLE IF EXISTS products")
         db?.execSQL("DROP TABLE IF EXISTS productsCart")
+        db?.execSQL("DROP TABLE IF EXISTS myPrefs")
         onCreate(db)
     }
 }

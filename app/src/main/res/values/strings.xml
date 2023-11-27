@@ -18,4 +18,13 @@
     <string name="noInternetConnection">oops no network connection!!!</string>
     <string name="cartAmount">Cart Amount: €</string>
     <string name="payButton">Pay</string>
+    <string name="nightMode">Turn on night mode</string>
+    <string name="normalMode">Turn off night mode</string>
+    <string name="reminder">Reminding</string>
+    <string name="off">Off</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Password</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="signOut">Sign Out</string>
 </resources>
