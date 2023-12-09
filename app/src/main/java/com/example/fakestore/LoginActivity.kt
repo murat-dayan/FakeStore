@@ -4,10 +4,12 @@ import android.content.Intent
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.example.fakestore.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding.editTextEmail.setSingleLine(true)
         binding.editTextPassword.setSingleLine(true)
+        binding.editTextPassword.inputType= InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        binding.editTextEmail.inputType= InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
         closeLottieWhenKeyboardOpen()
 
@@ -55,6 +59,37 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        binding.forgetPasswordText.setOnClickListener {
+            val builder= AlertDialog.Builder(this)
+            builder.setTitle("FAKESTORE")
+            builder.setMessage("Şifre sıfırlama bağlantısı e mail adresinize gönderilecektir.")
+            builder.setPositiveButton("Gönder"){ dialog,which->
+                val email = binding.editTextEmail.text.toString().trim()
+
+                if (email.isEmpty()) {
+                    Toast.makeText(this, "Lütfen e-posta adresinizi girin", Toast.LENGTH_SHORT).show()
+                } else {
+                    resetPassword(email)
+                }
+            }
+            builder.setNegativeButton("İptal"){dialog,which->
+            }
+            val dialog= builder.create()
+            dialog.show()
+        }
+
+
+    }
+
+    fun resetPassword(email:String){
+
+        auth.sendPasswordResetEmail(email).addOnCompleteListener {
+            if (it.isSuccessful){
+                Toast.makeText(this,"Şifre sıfırlama bağlantısı gönderildi",Toast.LENGTH_LONG).show()
+            }else{
+                Toast.makeText(this,"Şifre sıfırlama bağlantısı başarısız",Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 

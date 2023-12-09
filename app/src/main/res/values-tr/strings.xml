@@ -29,5 +29,7 @@
     <string name="signIn">Giriş Yap</string>
     <string name="signUp">Kayıt Ol</string>
     <string name="signOut">Oturumu Kapat</string>
+    <string name="forgetPassword">Şifremi Unuttum?</string>
+
 
 </resources>

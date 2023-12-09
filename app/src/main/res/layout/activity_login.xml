@@ -28,6 +28,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
+            app:startIconDrawable="@drawable/email_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -46,6 +47,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
+            app:startIconDrawable="@drawable/lock_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -95,5 +97,18 @@
             app:layout_constraintTop_toBottomOf="@+id/buttonLogIn"
             app:strokeColor="@color/white"
             app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/forgetPasswordText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/forgetPassword"
+            android:textColor="@color/darkGray"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonSignUp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

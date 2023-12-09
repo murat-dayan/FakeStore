@@ -7,15 +7,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fakestore.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var pdi: ProductsDaoInterface
     private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var productsAdapter: ProductsAdapter
-    private lateinit var userMail:String
-    private lateinit var auth:FirebaseAuth
+    private lateinit var auth: FirebaseAuth
+    private lateinit var dbh: DatabaseHelper
+    private lateinit var list: List<Products>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +36,15 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         setTheme(R.style.Theme_FakeStore)
 
-        auth= FirebaseAuth.getInstance()
+
+        list = ArrayList<Products>()
+
+        auth = FirebaseAuth.getInstance()
+
+        binding.progressBar.visibility = View.VISIBLE
 
 
-        binding.toolbarMA.title = getString(R.string.products)
+        binding.toolbarMA.title = getString(R.string.app_name)
         binding.toolbarMA.setBackgroundColor(getColor(R.color.main_color))
         setSupportActionBar(binding.toolbarMA)
 
@@ -56,10 +62,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         } else {
             allCategories()
             allProducts()
+
         }
 
 
     }
+
+    
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -79,23 +88,43 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 startActivity(Intent(this@MainActivity, CartActivity::class.java))
                 return true
             }
+
             R.id.action_search -> {
                 return true
             }
+
             R.id.action_favorites -> {
                 startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
                 return true
             }
+
             R.id.action_settings -> {
-                val intent= Intent(this@MainActivity, SettingsActivity::class.java)
+                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
                 startActivity(intent)
                 return true
             }
+
             R.id.action_sign_out -> {
-                auth.signOut()
-                startActivity(Intent(this,LoginActivity::class.java))
+
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("FAKESTORE")
+                builder.setMessage("Favori ve Sepetinizdek ürünleriniz kaybolacaktır. Çıkış Yapmak İstediğinize emin misiniz?")
+                builder.setPositiveButton("Çıkış Yap") { dialog, which ->
+                    dbh = DatabaseHelper(this)
+                    SqlDao().deleteProducts(dbh)
+                    SqlDao().deleteCarts(dbh)
+                    auth.signOut()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                }
+                builder.setNegativeButton("İptal") { dialog, which ->
+                }
+                val dialog = builder.create()
+                dialog.show()
+
+
                 return true
             }
+
             else -> return super.onOptionsItemSelected(item)
 
         }
@@ -107,6 +136,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             allProducts()
         } else {
             allProductsByTitle(query)
+
         }
         return true
     }
@@ -115,15 +145,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onQueryTextChange(newText: String?): Boolean {
         if (!newText.isNullOrEmpty()) {
             allProductsByTitle(newText)
+
         } else {
             allProducts()
         }
         return true
     }
 
-    override fun onBackPressed() {
-
-    }
 
     fun allProductsByTitle(searchedProduct: String) {
         pdi = ApiUtils.getProductsDaoInterface()
@@ -134,14 +162,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 response: Response<List<Products>>?
             ) {
                 if (response != null) {
-                    val liste = response.body()
-
-                    if (liste != null) {
-                        productsAdapter = ProductsAdapter(this@MainActivity, liste)
-                        binding.rvMAP.adapter = productsAdapter
-                    } else {
-                        Toast.makeText(this@MainActivity, "Not Found", Toast.LENGTH_SHORT).show()
-                    }
+                    list = response.body()
+                    productsAdapter.notifyDataSetChanged()
 
                 }
             }
@@ -153,34 +175,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         })
     }
 
-    fun
-            allCategories() {
-        pdi = ApiUtils.getProductsDaoInterface()
-
-        pdi.getAllCategories().enqueue(object : Callback<List<Categories>> {
-            override fun onResponse(
-                call: Call<List<Categories>>?,
-                response: Response<List<Categories>>?
-            ) {
-
-                if (response != null) {
-                    val liste = response.body()
-
-                    categoriesAdapter = CategoriesAdapter(this@MainActivity, liste)
-                    binding.rvMA.adapter = categoriesAdapter
-
-
-                }
-
-            }
-
-            override fun onFailure(call: Call<List<Categories>>?, t: Throwable) {
-                Log.e("onFailure", t.localizedMessage)
-            }
-
-
-        })
-    }
 
     fun allProducts() {
         pdi = ApiUtils.getProductsDaoInterface()
@@ -191,11 +185,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 response: Response<List<Products>>?
             ) {
                 if (response != null) {
-                    val liste = response.body()
-
-                    productsAdapter = ProductsAdapter(this@MainActivity, liste)
-                    binding.rvMAP.adapter = productsAdapter
-
+                    list = response.body()
+                    if (list.isNotEmpty()) {
+                        if (!::productsAdapter.isInitialized) {
+                            productsAdapter = ProductsAdapter(this@MainActivity, list)
+                            binding.rvMAP.adapter = productsAdapter
+                        } else {
+                            productsAdapter.notifyDataSetChanged()
+                        }
+                        binding.progressBar.visibility = View.GONE
+                    } else {
+                        Toast.makeText(this@MainActivity, "Not Found", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
@@ -213,6 +214,34 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         val networkInfo = connectivityManager.activeNetworkInfo
 
         return networkInfo != null && networkInfo.isConnected
+    }
+
+    fun allCategories() {
+        pdi = ApiUtils.getProductsDaoInterface()
+
+        pdi.getAllCategories().enqueue(object : Callback<List<Categories>> {
+            override fun onResponse(
+                call: Call<List<Categories>>?,
+                response: Response<List<Categories>>?
+            ) {
+
+                if (response != null) {
+                    val liste = response.body()
+
+                    categoriesAdapter = CategoriesAdapter(this@MainActivity, liste)
+                    binding.rvMA.adapter = categoriesAdapter
+                    binding.progressBar.visibility = View.GONE
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<Categories>>?, t: Throwable) {
+                Log.e("onFailure", t.localizedMessage)
+            }
+
+
+        })
     }
 
 

@@ -128,6 +128,12 @@ class SqlDao {
         return productsArrayList
     }
 
+    fun deleteProducts(dbh: DatabaseHelper){
+        val db= dbh.writableDatabase
+        db.execSQL("DELETE FROM products")
+        db.close()
+    }
+
     fun getProductsCart(dbh:DatabaseHelper) : ArrayList<Products>{
         val productsArrayList= ArrayList<Products>()
 
@@ -164,6 +170,12 @@ class SqlDao {
     fun deleteProductsCart(dbh: DatabaseHelper, id:Int){
         val db= dbh.writableDatabase
         db.delete("productsCart","id=?", arrayOf(id.toString()))
+        db.close()
+    }
+
+    fun deleteCarts(dbh: DatabaseHelper){
+        val db= dbh.writableDatabase
+        db.execSQL("DELETE FROM productsCart")
         db.close()
     }
 
@@ -222,6 +234,8 @@ class SqlDao {
         db.execSQL(query)
         db.close()
     }
+
+
 
 
 

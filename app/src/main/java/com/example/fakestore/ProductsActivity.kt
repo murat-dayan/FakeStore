@@ -3,6 +3,7 @@ package com.example.fakestore
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.fakestore.databinding.ActivityProductsBinding
@@ -21,8 +22,8 @@ class ProductsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_products)
 
-
-
+        binding.lottieView.visibility= View.GONE
+        binding.progressBar.visibility= View.VISIBLE
         binding.rvPA.setHasFixedSize(true)
         binding.rvPA.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -53,7 +54,10 @@ class ProductsActivity : AppCompatActivity() {
 
                     productsAdapter = ProductsAdapter(this@ProductsActivity, liste)
                     binding.rvPA.adapter = productsAdapter
-
+                    binding.progressBar.visibility= View.GONE
+                    if (liste != null && liste.isEmpty()) {
+                        binding.lottieView.visibility= View.VISIBLE
+                    }
                 }
             }
 

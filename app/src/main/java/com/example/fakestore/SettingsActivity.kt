@@ -21,39 +21,42 @@ class SettingsActivity : AppCompatActivity() {
 
         dbh= DatabaseHelper(this)
 
-        binding.editTextReminder.isFocusable = false
-        binding.editTextReminder.isFocusableInTouchMode = false
 
         binding.toolbarSA.title = getString(R.string.settings)
         binding.toolbarSA.setBackgroundColor(getColor(R.color.main_color))
         setSupportActionBar(binding.toolbarSA)
+        var mode= SqlDao().getNightMode(dbh)
+        if (mode ==0){
+            binding.buttonNightMode.setText(R.string.nightMode)
+        }else{
+            binding.buttonNightMode.setText(R.string.normalMode)
+        }
 
 
-        binding.checkBox.setOnCheckedChangeListener { compoundButton, b ->
-            var mode=0
-            if (b){
+
+        binding.buttonNightMode.setOnClickListener {
+            updateAppLanguage()
+            if (mode ==0){
                 mode=1
                 SqlDao().updateNightMode(dbh,mode)
-            }else{
-                SqlDao().updateNightMode(dbh,mode)
-            }
-
-
-            if (b) {
-                // Checkbox aktif ise gece moduna geç
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                // Checkbox aktif değilse gündüz moduna geç
+                binding.buttonNightMode.setText(R.string.normalMode)
+            }else{
+                mode =0
+                SqlDao().updateNightMode(dbh,mode)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                binding.buttonNightMode.setText(R.string.nightMode)
+
             }
 
-            settingLanguage()
+
         }
 
         
         binding.buttonTranslateEN.setOnClickListener {
 
             settingLanguage()
+            updateAppLanguage()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
