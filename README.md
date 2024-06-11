@@ -20,7 +20,7 @@ Technologies used in the project:
 *   Kotlin
 *   Retrofit
 *   Picasso
-*   Room Database
+*   Sqlite Database
 *   Firebase
 *   Lottie
 *   Gson
